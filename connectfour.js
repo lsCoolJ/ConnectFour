@@ -57,6 +57,19 @@ function setPiece() {
     checkWinner();
 }
 
+/* TODO: implement undo function.
+ * In order to do this, I would have to keep track of the previous
+ * moves as they're made. This can be kept in an ArrayList of Integer pairs
+ * since the players turn we're undoing can be determined by who the current
+ * player is.
+*/
+function undo() {
+    if(gameOver) return;
+
+    let tempList = [];
+
+}
+
 function checkWinner() {
     //Sliding window check technique. Will change to check all around placed tile.
     for(let r = 0; r < rows; r++) {
@@ -68,7 +81,7 @@ function checkWinner() {
                     setWinner(r, c);
                     return;
                 }
-            }
+            } else break;
         }
     }
     for(let c = 0; c < columns; c++) {
@@ -80,7 +93,7 @@ function checkWinner() {
                     setWinner(r, c);
                     return;
                 }
-            }
+            } else break;
         }
     }
     for(let r = 0; r < rows-3; r++) {
@@ -92,7 +105,7 @@ function checkWinner() {
                     setWinner(r,c);
                     return;
                 }
-            }
+            } else break;
         }
     }
     for(let r = 3; r < rows; r++) {
@@ -104,13 +117,14 @@ function checkWinner() {
                     setWinner(r,c);
                     return;
                 }
-            }
+            } else break;
         }
     }
 
     //Check if a tie:
     //If every column on the board is set to -1, 
-    //all the columns are full and winners were checked.
+    //all the columns are full and winners were
+    //checked each turn so it is a tie.
     if(curCol.every(v => v === -1)) {
         setWinner(-1,-1);
         return;
@@ -121,14 +135,16 @@ function setWinner(r, c) {
     document.getElementById("player").innerText = "";
     let winner = document.getElementById("winner");
     if(r == -1 && c == -1) winner.innerText = "It's a tie!";
-    else if(board[r][c] == "T") winner.innerText = "Teal Wins";
-    else winner.innerText = "Pink Wins";
+    else if(board[r][c] == "T") winner.innerText = "Congratulations, Teal Wins";
+    else winner.innerText = "Congratulations, Pink Wins";
     gameOver = true;
 }
 
 function resetBoard() {
     let board = document.getElementById("board");
     while(board.firstChild) board.removeChild(board.lastChild);
+    document.getElementById("winner").innerText = "";
+    gameOver = false;
     initBoard();
     return;
 }
